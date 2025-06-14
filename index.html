@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Dia dos Namorados</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 5px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Área do carrossel */
+        .body {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100px;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Botões de navegação */
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .carousel-control:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev {
+            left: 15px;
+        }
+
+        .next {
+            right: 15px;
+        }
+
+        /* Indicadores */
+        .carousel-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        hr {
+            margin-top: 30px;
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+
+        .info {
+            color: white;
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .info p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .counter-container {
+            color: aliceblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .counter-container h2 {
+            margin-bottom: 10px;
+        }
+
+        .counter {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 30px;
+            border-radius: 15px;
+        }
+
+        .days-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .texts {
+            color: white;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .texts h3 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .texts p {
+            margin: 15px 0;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .texts strong {
+            color: #ffd700;
+        }
+
+        /* Estilos para os corações */
+        .heart {
+            position: absolute;
+            top: -50px;
+            font-size: 2rem;
+            animation: fall linear forwards;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Estilo do iframe do Spotify */
+        .spotify-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .spotify-container iframe {
+            background-color: rgb(30, 30, 30);
+            border-radius: 16px;
+            width: 340px;
+            height: 120px;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-item img {
+                height: 350px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .carousel-control {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+
+            .counter {
+                font-size: 2rem;
+            }
+
+            .texts p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-item img {
+                height: 250px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .spotify-container iframe {
+                width: 300px;
+                height: 100px;
+            }
+
+            .counter {
+                font-size: 1.8rem;
+                padding: 8px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="container">
+        <div id="hearts-container" style="z-index: 1000; position: absolute;"></div>
+
+        <div class="spotify-container">
+            <iframe
+                src="https://open.spotify.com/embed/track/5lLKJdDPy7qbsta6d88lKE?si=694b978ef7b44ba3?utm_source=generator&amp;theme=0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                style="width: 95%;"></iframe>
+        </div>
+
+        <h1 style="text-align: center;">💕FELIZ DIA DOS NAMORADOS MINHA GATINHA💕</h1>
+
+        <div class="body">
+            <div class="carousel">
+                <div class="carousel-item">
+                    <img src="images/foto2.jpeg"
+                        alt="Floresta com Névoa"
+                        style="height: min-content;">
+                </div>
+                <div class="carousel-item">
+                    <img src="images/foto3.jpeg"
+                        alt="Natureza"
+                        style="height: min-content;">
+                </div>
+                <div class="carousel-item">
+                    <img src="images/foto4.jpeg"
+                        alt="Paisagem"
+                        style="height: min-content;">
+                </div>
+                <div class="carousel-item">
+                    <img src="images/foto5.jpeg"
+                        alt="Montanhas"
+                        style="height: 80%;">
+                </div>
+                <div class="carousel-item">
+                    <img src="images/foto6.jpeg"
+                        alt="Montanhas"
+                        style="height: min-content;">
+                </div>
+                <div class="carousel-item">
+                    <img src="images/foto7.jpeg"
+                        alt="Montanhas"
+                        style="height: min-content;">
+                </div>
+                <div class="carousel-item">
+                    <img src="images/foto8.jpeg"
+                        alt="Montanhas"
+                        style="height: min-content;">
+                </div>
+                <div class="carousel-item">
+                    <img src="images/foto9.jpeg"
+                        alt="Montanhas"
+                        style="height: min-content;">
+                </div>
+                <div class="carousel-item">
+                    <img src="images/foto10.jpeg"
+                        alt="Montanhas"
+                        style="height: min-content;">
+                </div>
+            </div>
+
+            <button class="carousel-control prev">❮</button>
+            <button class="carousel-control next">❯</button>
+
+            <div class="carousel-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
+                <div class="indicator" data-index="3"></div>
+                <div class="indicator" data-index="4"></div>
+            </div>
+            <hr>
+        </div>
+
+        <div class="counter-container">
+            <h2>💕 Estamos Juntos Há: </h2>
+            <!-- <div class="tempo_marcad"></div> -->
+            <div class="date-controls">
+                <input type="date" id="start-date" value="2025-05-03" disabled="desabled">
+            </div>
+
+            <div class="time-display">
+                <div class="tempo_marcad">0 anos, 0 meses, 0 dias, 0 horas, 0 minutos, 0 segundos</div>
+            </div>
+
+        
+        </div>
+
+        <hr style="width: 100%;" />
+
+        <div class="texts">
+            <h3>Nosso primeiro dia dos namorados juntinhos, e espero que seja o primeiro de muitos que virão,
+                <strong>💕Te Amo💕</strong>
+            </h3>
+            <p>
+                💕 "Desde o primeiro dia, você me mostrou que o amor verdadeiro existe e que é ainda mais
+                bonito do que eu imaginava. Com você, cada instante se torna especial e cada sonho parece mais real.
+                Hoje, só quero te lembrar o quanto você é importante para mim e o quanto eu te amo!" 💕
+            </p>
+
+            <p>"Se eu tivesse que atravessar todos os universos, todas as eras e desvendar todos os
+                segredos desta vida, ainda assim, meu destino seria te encontrar. Porque em meio às infinitas
+                belezas do cosmos, nada brilha mais para mim do que você.</p>
+
+            <p>Se as estrelas fossem mapas e o tempo apenas um véu entre nós,
+                eu cruzaria galáxias e viajaria além das fronteiras da existência para chegar até você.
+                Pois em cada partícula do universo, em cada eco do passado e vislumbre do futuro,
+                há um fio invisível que me guia—e esse fio sempre me levará a você.</p>
+
+            <p>Não importa quantas vidas eu tenha que viver, quantos mistérios eu tenha que desvendar, nem
+                quantos mundos eu tenha que atravessar. Meu destino, desde o primeiro sopro do universo,
+                é sempre te amar." ✨💫</p>
+        </div>
+    </section>
+
+    <script defer>
+        // Função para criar corações caindo
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts-container');
+
+            function createHeart() {
+                const heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.innerHTML = "💖";
+
+                // Posição aleatória
+                heart.style.left = Math.random() * window.innerWidth + "px";
+
+                // Tamanho aleatório
+                const size = Math.random() * 2 + 1;
+                heart.style.fontSize = size + "rem";
+
+                // Duração e atraso aleatórios da animação
+                const animationDuration = Math.random() * 5 + 3;
+                heart.style.animation = `fall ${animationDuration}s linear infinite`;
+
+                heartsContainer.appendChild(heart);
+
+                // Remover o coração após a animação
+                setTimeout(() => {
+                    heart.remove();
+                }, animationDuration * 1000);
+            }
+
+            // Criar um coração a cada 300ms
+            setInterval(createHeart, 300);
+        }
+
+        //------------------------------------------------------------------------------------
+         //Função para calcular o tempo decorrido
+        function calculateTimeSince(startDate) {
+            const now = new Date();
+            let diff = now - startDate;
+            
+            // Calcular segundos, minutos, horas
+            const seconds = Math.floor(diff / 1000) % 60;
+            const minutes = Math.floor(diff / (1000 * 60)) % 60;
+            const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+            
+            // Calcular dias, meses e anos
+            const startYear = startDate.getFullYear();
+            const startMonth = startDate.getMonth();
+            const startDay = startDate.getDate();
+            
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            const currentDay = now.getDate();
+            
+            let years = currentYear - startYear;
+            let months = currentMonth - startMonth;
+            let days = currentDay - startDay;
+            
+            // Ajustar valores negativos
+            if (days < 0) {
+                months--;
+                // Obter dias do mês anterior
+                const prevMonthLastDay = new Date(currentYear, currentMonth, 0).getDate();
+                days += prevMonthLastDay;
+            }
+            
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            return {
+                years,
+                months,
+                days,
+                hours,
+                minutes,
+                seconds
+            };
+        }
+        
+        // Função para formatar o tempo como string
+        function formatTime(timeObj) {
+            return `${timeObj.years} anos, ${timeObj.months} meses, ${timeObj.days} dias, ${timeObj.hours} horas, ${timeObj.minutes} minutos, ${timeObj.seconds} segundos`;
+        }
+        
+        // Função para atualizar a exibição do tempo
+        function updateTimeDisplay() {
+            const startDateInput = document.getElementById('start-date').value;
+            const startDate = new Date(startDateInput);
+            
+            // Verificar se a data é válida
+            if (isNaN(startDate.getTime())) {
+                document.querySelector('.tempo_marcad').textContent = "Por favor, selecione uma data válida";
+                return;
+            }
+            
+            const timeSince = calculateTimeSince(startDate);
+            const formattedTime = formatTime(timeSince);
+            
+            // Atualizar o campo .tempo_marcad
+            const tempo_marcad = document.querySelector('.tempo_marcad');
+            tempo_marcad.textContent = formattedTime;
+            
+            // Atualizar os cartões individuais
+            document.getElementById('years').textContent = timeSince.years;
+            document.getElementById('months').textContent = timeSince.months;
+            document.getElementById('days').textContent = timeSince.days;
+            document.getElementById('hours').textContent = timeSince.hours;
+            document.getElementById('minutes').textContent = timeSince.minutes;
+            document.getElementById('seconds').textContent = timeSince.seconds;
+        }
+        
+        // Inicializar quando o documento estiver pronto
+        document.addEventListener("DOMContentLoaded", function() {
+            createHearts();
+            
+            // Configurar o intervalo de atualização
+            updateTimeDisplay(); // Atualizar imediatamente
+            setInterval(updateTimeDisplay, 1000);
+            
+            // Atualizar quando a data for alterada
+            document.getElementById('start-date').addEventListener('change', updateTimeDisplay);
+        });
+        //------------------------------------------------------------------------------------
+
+         // Função para o carrossel
+        function setupCarousel() {
+            const carousel = document.querySelector('.carousel');
+            const items = document.querySelectorAll('.carousel-item');
+            const prevBtn = document.querySelector('.prev');
+            const nextBtn = document.querySelector('.next');
+            const indicators = document.querySelectorAll('.indicator');
+
+            let currentIndex = 0;
+            const totalItems = items.length;
+            let autoSlideInterval;
+
+            // Função para atualizar o carrossel
+            function updateCarousel() {
+                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+                // Atualizar indicadores
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentIndex);
+                });
+            }
+
+            // Função para avançar para o próximo slide
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % totalItems;
+                updateCarousel();
+            }
+
+            // Função para voltar ao slide anterior
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+                updateCarousel();
+            }
+
+            // Event listeners para os botões
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            // Event listeners para os indicadores
+            indicators.forEach((indicator) => {
+                indicator.addEventListener('click', () => {
+                    currentIndex = parseInt(indicator.getAttribute('data-index'));
+                    updateCarousel();
+                });
+            });
+
+            // Iniciar slides automáticos
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(nextSlide, 5000);
+            }
+
+            // Parar slides automáticos quando o mouse está sobre o carrossel
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval);
+            }
+
+            // Adicionar eventos de mouse
+            const carouselContainer = document.querySelector('.body');
+            carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+            carouselContainer.addEventListener('mouseleave', startAutoSlide);
+
+            // Adicionar suporte para teclado
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                }
+            });
+
+            // Adicionar suporte para touch (swipe)
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            carouselContainer.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            carouselContainer.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+
+                if (touchStartX - touchEndX > swipeThreshold) {
+                    nextSlide();
+                } else if (touchEndX - touchStartX > swipeThreshold) {
+                    prevSlide();
+                }
+            }
+
+            // Iniciar o carrossel
+            updateCarousel();
+            startAutoSlide();
+        }
+
+        // Inicializar quando o documento estiver carregado
+        document.addEventListener("DOMContentLoaded", function() {
+            setupCarousel();
+        });
+    </script>
+</body>
+
+</html>
